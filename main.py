@@ -3,14 +3,16 @@ from reportlab.pdfgen import canvas
 #from reportlab.pdfbase import pdfform
 #from reportlab.lib.colors import magenta, pink, blue, green
 from reportlab.lib.pagesizes import A4
-from configparser import ConfigParser
+import json
+
+with open("config.json", "r") as jsonfile:
+    config = json.load(jsonfile) # Reading the file
+    jsonfile.close()
 
 # PARAMETERS
-config = ConfigParser()
-config.read('config.ini')
-phrase = config.get('PHRASE', 'WORDS')
-title = config.get('FILE', 'TITLE')
-filename = config.get('FILE', 'NAME') + '_' + str(len(phrase)) + 'W.pdf'
+phrase = config['words']
+title = config['pdf_title']
+filename = config['filename'] + '_' + str(len(phrase)) + 'W.pdf'
 
 # DIMENSIONS
 pagesize = A4

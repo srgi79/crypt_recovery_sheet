@@ -8,27 +8,7 @@ import json
 with open("config.json", "r") as jsonfile:
     config = json.load(jsonfile) # Reading the file
     jsonfile.close()
-
-# PARAMETERS
-phrase = config['words']
-title = config['pdf_title']
-filename = config['filename'] + '_' + str(len(phrase)) + 'W.pdf'
-address = config['address']
-
-# DIMENSIONS
-pagesize = A4
-font_title_size = 20
-font_box_size = 8
-color = Color(100, 100, 100, alpha=0)
-
-# HEADER
-c = canvas.Canvas(filename, pagesize=pagesize)
-c.setTitle(filename)
-c.setFont("Courier", font_title_size)
-c.drawCentredString(pagesize[0]/2, pagesize[1]-font_title_size-10, title)
-c.setFont("Courier", font_box_size)
-form = c.acroForm
-
+    wallet = config[0]
 
 def append_text_box(text_list, initY, deltaY):
     # INIT
@@ -54,7 +34,39 @@ def append_text_box(text_list, initY, deltaY):
     
     c.setFont("Courier", font_box_size)
     c.drawString(20, lastY-10, address)
-    c.save()
+    return lastY-10
 
-if __name__ == '__main__':
-    append_text_box(phrase, pagesize[1]-50, font_box_size*3)
+pagesize = A4
+title = wallet['pdf_title']
+filename = wallet['filename'] + '.pdf'
+c = canvas.Canvas(filename, pagesize=pagesize)
+c.setTitle(filename)
+
+# DIMENSIONS
+font_title_size = 20
+font_box_size = 8
+color = Color(100, 100, 100, alpha=0)
+
+startTitle = pagesize[1]-font_title_size-10
+startWallet = pagesize[1]-50
+
+for wallet in config:
+
+    # PARAMETERS
+    phrase = wallet['words']
+    address = wallet['address']
+
+    # HEADER
+    c.setFont("Courier", font_title_size)
+    c.drawCentredString(pagesize[0]/2, startTitle, title)
+    c.setFont("Courier", font_box_size)
+    form = c.acroForm
+
+    lastY = append_text_box(phrase, startWallet, font_box_size*3)
+
+    startTitle = lastY-30
+    startWallet = startTitle - 20
+
+
+c.save()
+

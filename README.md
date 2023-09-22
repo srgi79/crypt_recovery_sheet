@@ -1,4 +1,4 @@
-# crypt_recovery_sheet
+# crypto_recovery_sheet
 Create a crypto phrase recovery sheet with python
 
 ## Requirements
